@@ -4,16 +4,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="GNSS 大地坐标、ECEF 与站心 ENU 坐标在线转换工具" />
-  <title>GeoShift · GNSS 坐标转换</title>
+  <title>GNSS Studio · 让 GNSS 更简单</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="dms.css" />
   <link rel="stylesheet" href="layout.css" />
 </head>
-<body>
+<body class="landing">
   <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
+  <section id="home" class="home-screen">
+    <header class="home-nav">
+      <a class="studio-brand" href="#home" aria-label="GNSS Studio 首页"><span class="studio-mark">GS</span><span>GNSS Studio</span></a>
+      <span class="studio-version">GNSS TOOLBOX · 01</span>
+    </header>
+    <div class="home-content">
+      <div class="home-copy">
+        <div class="home-kicker"><span></span> BUILT FOR GNSS</div>
+        <h1>GNSS<br><em>Studio</em></h1>
+        <p>一个让 GNSS 变得更简单、更易用的平台。</p>
+        <button id="enterConverter" class="enter-button"><span>坐标转换</span><i>→</i></button>
+      </div>
+      <div class="home-visual" aria-hidden="true">
+        <div class="globe"><span class="axis axis-a"></span><span class="axis axis-b"></span><i></i><b>GNSS</b></div>
+        <div class="signal signal-a"></div><div class="signal signal-b"></div>
+        <small>POSITION · NAVIGATION · TIMING</small>
+      </div>
+    </div>
+    <footer class="home-footer"><span>01 / COORDINATE TRANSFORM</span><span>所有计算均在浏览器本地完成</span></footer>
+  </section>
   <header class="topbar">
-    <a class="brand" href="#" aria-label="GeoShift 首页"><span class="brand-mark">G</span><span>GeoShift</span></a>
-    <nav><a href="#converter">坐标转换</a><a href="#dms-tool">角度互转</a><a href="#guide">使用说明</a></nav>
+    <a id="backHome" class="brand" href="#home" aria-label="GNSS Studio 首页"><span class="brand-mark">G</span><span>GNSS Studio</span></a>
+    <nav><a href="#home" class="home-link">主页</a><a href="#converter">坐标转换</a><a href="#dms-tool">角度互转</a><a href="#guide">使用说明</a></nav>
     <span class="status"><i></i> 本地计算</span>
   </header>
 

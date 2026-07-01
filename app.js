@@ -1,4 +1,10 @@
 const $ = (id) => document.getElementById(id);
+function showConverter(){document.body.classList.remove('landing');document.body.classList.add('app-active');history.replaceState(null,'','#converter');window.scrollTo({top:0,behavior:'smooth'})}
+function showHome(event){if(event)event.preventDefault();document.body.classList.add('landing');document.body.classList.remove('app-active');history.replaceState(null,'','#home');window.scrollTo({top:0,behavior:'smooth'})}
+$('enterConverter').addEventListener('click',showConverter);
+$('backHome').addEventListener('click',showHome);
+document.querySelectorAll('.home-link').forEach(link=>link.addEventListener('click',showHome));
+if(location.hash&&location.hash!=='#home'){document.body.classList.remove('landing');document.body.classList.add('app-active')}
 const ellipsoids = {
   wgs84: { a: 6378137, invF: 298.257223563 },
   cgcs2000: { a: 6378137, invF: 298.257222101 },
