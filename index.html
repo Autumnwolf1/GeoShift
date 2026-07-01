@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="GNSS 大地坐标、ECEF 与站心 ENU 坐标在线转换工具" />
+  <title>GeoShift · GNSS 坐标转换</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="dms.css" />
+  <link rel="stylesheet" href="layout.css" />
+</head>
+<body>
+  <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="GeoShift 首页"><span class="brand-mark">G</span><span>GeoShift</span></a>
+    <nav><a href="#converter">坐标转换</a><a href="#dms-tool">角度互转</a><a href="#guide">使用说明</a></nav>
+    <span class="status"><i></i> 本地计算</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow"><span>●</span> GNSS TOOLBOX</div>
+      <h1><span>让坐标转换</span><em><i>清晰</i><i>准确</i><i>简单<span>。</span></i></em></h1>
+      <p>支持大地坐标、地心地固坐标与站心坐标互转。所有计算在浏览器本地完成，数据不会上传。</p>
+      <div class="hero-tags"><span>WGS 84</span><span>CGCS2000 椭球</span><span>ECEF</span><span>ENU</span></div>
+    </section>
+
+    <section id="converter" class="converter-card">
+      <div class="card-head">
+        <div><span class="section-no">01</span><h2>坐标转换器</h2></div>
+        <button id="fillExample" class="text-button">填入示例 ↗</button>
+      </div>
+
+      <div class="toolbar">
+        <label>转换模式<select id="mode">
+          <option value="geo-ecef">大地坐标 → ECEF</option>
+          <option value="ecef-geo">ECEF → 大地坐标</option>
+          <option value="ecef-enu">ECEF → ENU</option>
+          <option value="enu-ecef">ENU → ECEF</option>
+        </select></label>
+        <label>参考椭球<select id="ellipsoid">
+          <option value="wgs84">WGS 84</option>
+          <option value="cgcs2000">CGCS2000</option>
+          <option value="grs80">GRS 80</option>
+          <option value="custom">自定义</option>
+        </select></label>
+        <button id="swapMode" class="swap-button" title="反向转换" aria-label="切换转换方向">⇄</button>
+      </div>
+
+      <div id="customEllipsoid" class="custom-row hidden">
+        <label>长半轴 a (m)<input id="semiMajor" type="number" value="6378137" step="any"></label>
+        <label>扁率倒数 1/f<input id="inverseFlattening" type="number" value="298.257223563" step="any"></label>
+      </div>
+
+      <div class="workbench">
+        <div class="input-panel">
+          <div class="panel-label"><span>输入坐标</span><small id="inputType">GEODETIC</small></div>
+          <div id="inputFields" class="fields"></div>
+          <div id="originFields" class="origin-box hidden">
+            <div class="origin-title"><span>站心原点</span><small>纬度 / 经度 / 椭球高</small></div>
+            <div class="origin-grid">
+              <label>纬度 B (°)<input id="originLat" type="number" step="any" placeholder="39.9042"></label>
+              <label>经度 L (°)<input id="originLon" type="number" step="any" placeholder="116.4074"></label>
+              <label>椭球高 h (m)<input id="originH" type="number" step="any" placeholder="50"></label>
+            </div>
+          </div>
+          <div class="actions"><button id="convert" class="primary-button">开始转换 <span>→</span></button><button id="clear" class="secondary-button">清空</button></div>
+          <p id="error" class="error" role="alert"></p>
+        </div>
+
+        <div class="result-panel">
+          <div class="panel-label"><span>转换结果</span><small id="outputType">ECEF</small></div>
+          <div id="emptyResult" class="empty-result"><div class="orbit"><i></i></div><p>输入坐标并开始转换</p><small>结果将在这里显示</small></div>
+          <div id="resultContent" class="result-content hidden"></div>
+          <button id="copyResult" class="copy-button hidden">复制全部结果</button>
+        </div>
+      </div>
+      <div class="precision-note"><span>计算精度</span> 双精度浮点运算 · 角度结果保留 9 位 · 距离结果保留 4 位</div>
+    </section>
+
+    <section id="dms-tool" class="dms-card">
+      <div class="card-head"><div><span class="section-no">02</span><h2>度分秒与十进制度互转</h2></div><span class="formula">DD ⇄ D° M′ S″</span></div>
+      <div class="dms-body">
+        <div class="dms-mode-row"><label>转换方向<select id="dmsMode"><option value="dms-decimal">度分秒 → 十进制度</option><option value="decimal-dms">十进制度 → 度分秒</option></select></label></div>
+        <div id="dmsInputGroup" class="dms-inputs">
+          <label>度 (°)<input id="dmsDegrees" type="number" min="0" max="180" step="1" placeholder="116"></label>
+          <label>分 (′)<input id="dmsMinutes" type="number" min="0" max="59" step="1" placeholder="24"></label>
+          <label>秒 (″)<input id="dmsSeconds" type="number" min="0" max="60" step="any" placeholder="26.64"></label>
+          <label>方向<select id="dmsDirection"><option value="E">东经 E（正）</option><option value="W">西经 W（负）</option><option value="N">北纬 N（正）</option><option value="S">南纬 S（负）</option></select></label>
+        </div>
+        <div id="decimalInputGroup" class="decimal-inputs hidden"><label>十进制度 (°)<input id="decimalInput" type="number" step="any" placeholder="例如 -73.985656"></label><label>坐标类型<select id="coordinateType"><option value="longitude">经度（E / W）</option><option value="latitude">纬度（N / S）</option></select></label></div>
+        <div class="dms-actions"><button id="convertDms" class="primary-button">开始转换 <span>→</span></button><button id="clearDms" class="secondary-button">清空</button></div>
+        <p id="dmsError" class="error" role="alert"></p>
+        <div class="dms-result" aria-live="polite"><span id="dmsResultLabel">十进制度</span><strong id="decimalDegrees">—</strong><button id="copyDms" class="mini-copy hidden">复制</button></div>
+      </div>
+    </section>
+
+    <section id="guide" class="guide">
+      <div class="guide-title"><span class="section-no">03</span><h2>开始之前</h2></div>
+      <div class="notes">
+        <article><b>01</b><h3>这里转换的是坐标表达</h3><p>选择椭球只改变数学参数，不等同于完成 WGS 84、CGCS2000 或 ITRF 之间的框架转换。</p></article>
+        <article><b>02</b><h3>高度采用椭球高</h3><p>GNSS 椭球高并不是海拔。转换正常高或正高时，还需匹配地区的大地水准面模型。</p></article>
+        <article><b>03</b><h3>ENU 需要站心原点</h3><p>东、北、天坐标是相对于指定原点的局部坐标，原点必须使用同一参考椭球。</p></article>
+      </div>
+    </section>
+  </main>
+  <footer><span>GeoShift / GNSS Toolbox</span><span>坐标很严肃，工具不必难用。</span></footer>
+  <div id="toast" class="toast">已复制到剪贴板</div>
+  <script src="app.js"></script>
+</body>
+</html>
